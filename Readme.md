@@ -1,10 +1,19 @@
-
-
-
-
 # Install
+	
+	cd <catkin_repo>/src
+	wget https://github.com/CARMinesDouai/turtlebot_web/archive/master.zip
+	unzip master.zip
+	...	
+	
+# How to use
 
-regarder ce que rosbridge_server peut envoyer
+First:
+
+	rosrun turtlebot_web run.sh
+
+Then access to localhost:8888
+	
+# Oldies
 
 --------	web-video-server
 sudo apt install ros-kinetic-web-video-server
