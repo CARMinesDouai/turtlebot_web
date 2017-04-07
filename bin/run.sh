@@ -1,8 +1,5 @@
-#!/usr/bin/bash
-
-
-roslaunch turtlebot_web turtlebot_web.launch
-
+#!/bin/bash
 # launch web server
-# php localhost:5555 -t web 
-
+cd ../web &&node ../web/app.js&
+# launch ROS
+roslaunch turtlebot_web turtlebot_web.launch

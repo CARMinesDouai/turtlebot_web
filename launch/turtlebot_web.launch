@@ -2,7 +2,7 @@
 <launch>
   <!-- launch minimal -->
   <include file="$(find turtlebot_bringup)/launch/minimal.launch"/>
-
+  <!-- launch move_base -->
   <include file="$(find turtlebot_navigation)/launch/includes/move_base.launch.xml"/>
   <!-- laser -->
   <node pkg="urg_node" type="urg_node" name="urg_node">
@@ -23,6 +23,4 @@
   <node pkg="robot_pose_publisher" type="robot_pose_publisher" name="robot_pose_publisher"/>
   <!-- web -->
   <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch"/>
-
-
 </launch>
