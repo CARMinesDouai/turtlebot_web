@@ -19,9 +19,8 @@
 	rm master.zip
 	
 # How to use
+First log into the robot's SSH server and run 
 
-First:
-	log into the robot's SSH server
 	rosrun turtlebot_web run.sh
 
-Then access to <robot ip>:8080
+Then access to \<robot ip\>:8080

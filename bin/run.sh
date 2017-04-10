@@ -1,5 +1,5 @@
-#!/bin/bash
+#!/bin/sh
 # launch web server
-cd ../web && node ../web/app.js&
+cd `dirname $0`/../web && node app.js&
 # launch ROS
 roslaunch turtlebot_web turtlebot_web.launch
