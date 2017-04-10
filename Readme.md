@@ -9,7 +9,7 @@
 ## Installing web-server dependance	
 	sudo apt install nodejs-legacy
 
-## Installing project
+## Installing project
 	cd <catkin_repo>/src
 	wget https://github.com/CARMinesDouai/turtlebot_web/archive/master.zip
 	unzip master.zip
@@ -21,7 +21,7 @@
 # How to use
 
 First:
-
+	log into the robot's SSH server
 	rosrun turtlebot_web run.sh
 
-Then access to localhost:8080
+Then access to <robot ip>:8080
