@@ -2,4 +2,4 @@
 # launch web server
 cd `dirname $0`/../web && node app.js&
 # launch ROS
-roslaunch turtlebot_web turtlebot_web.launch
+roslaunch turtlebot_web gmapping_explore.launch
