@@ -23,7 +23,7 @@ var Map = function (a) {
         continuous : that.continuous,
         withOrientation : that.withOrientation
       });
-    }, 500);
+    }, 1000);
   };
   this.initMeta = function () {
     var map_metadata = new ROSLIB.Topic({

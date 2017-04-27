@@ -3,6 +3,7 @@ var Vmap = function (a) {
   this.ros  = a.ros;
   this.continuous = a.continuous || false;
   this.divID = a.divID || 'vmap';
+  this.showPath = a.showPath || false;
   this.utils =  { rosQuaternionToGlobalTheta : function(orientation) {
                     var q0 = orientation.w;
                     var q1 = orientation.x;
@@ -13,7 +14,11 @@ var Vmap = function (a) {
                     var transform = 1.0/that.transMatrix[0];
                     return {x : (((x-that.transMatrix[4])*transform)-that.decaX)/that.scale,
                             y : -(((y-that.transMatrix[5])*transform)-that.decaY)/that.scale };
-                    }
+                    },
+                  rosToGlobal : function (x,y) {
+                    return {x : (that.decaX + (x*that.scale)),
+                            y : (that.decaY - (y*that.scale))};
+                  }
                   };
   this.eventsVar =  { position : null,
                       positionVec3 : null,
@@ -23,7 +28,8 @@ var Vmap = function (a) {
                       mouseDown : false,
                       xDelta : 0,
                       yDelta : 0,
-                      lastTimeStamp : 0};
+                      lastTimeStamp : 0,
+                      pathMarker : null};
   this.serverName = a.serverName || '/move_base';
   this.actionName = a.actionName || 'move_base_msgs/MoveBaseAction';
   this.actionClient = new ROSLIB.ActionClient({
@@ -48,7 +54,7 @@ var Vmap = function (a) {
       if (botSVGPos === null) {
         return;
       }
-      that.botPos = {x : (that.decaX + (pos.position.x*that.scale)), y : (that.decaY - (pos.position.y*that.scale))};
+      that.botPos = that.utils.rosToGlobal(pos.position.x,pos.position.y);
       botSVGPos.setAttribute("cx",that.botPos.x);
       botSVGPos.setAttribute("cy",that.botPos.y);
     });
@@ -62,6 +68,11 @@ var Vmap = function (a) {
       if (!that.continuous) {
         map.unsubscribe();
       }
+    });
+    that.navPlan = new ROSLIB.Topic({
+      ros : that.ros,
+      name : '/move_base/NavfnROS/plan',
+      messageType : 'nav_msgs/Path'
     });
     that.svg.onmousedown = function (event) {
       if (event.buttons == 1) {
@@ -115,7 +126,7 @@ var Vmap = function (a) {
       return SVG;
   };
   this.edgeToSVG = function(id, edge) {
-    var color = "red";
+    var color = "black";
     if (edge.src.type == 2) {
       color = "green";
     }
@@ -124,12 +135,32 @@ var Vmap = function (a) {
     if (id !== null) {
       line += "id='" + id + "' ";
     }
-    line += "x1='"+(that.decaX + (edge.src.x*that.scale))+"' y1='"+(that.decaY - (edge.src.y*that.scale))+"' "
-    +"x2='"+(that.decaX + (edge.trg.x*that.scale))+"' y2='"+(that.decaY -(edge.trg.y*that.scale))+"' "
+    var src = that.utils.rosToGlobal(edge.src.x,edge.src.y);
+    var trg = that.utils.rosToGlobal(edge.trg.x,edge.trg.y);
+    line += "x1='"+src.x+"' y1='"+src.y+"' "+"x2='"+trg.x+"' y2='"+trg.y+"' "
     +"style='stroke:"+color+";stroke-width:2' />";
     return line;
   };
   this.sendGoal = function(pose) {
+    if (that.showPath) {
+      that.navPlan.subscribe(function(path) {
+        if (that.eventsVar.pathMarker === null) {
+          that.eventsVar.pathMarker = document.createElementNS('http://www.w3.org/2000/svg','polyline');
+          that.eventsVar.pathMarker.setAttribute('style',"stroke:red;stroke-width:1;fill:none;");
+          that.svg.appendChild(that.eventsVar.pathMarker);
+        }
+        var points = "";
+        console.log(path);
+        console.log(path.poses);
+        for (pathPose of path.poses) {
+          var posTmp = that.utils.rosToGlobal(pathPose.pose.position.x,pathPose.pose.position.y);
+          points += posTmp.x+","+posTmp.y+" ";
+        }
+        that.eventsVar.pathMarker.setAttribute('points', points);
+        console.log(that.eventsVar.pathMarker);
+        that.navPlan.unsubscribe();
+      });
+    }
     // create a goal
     var goal = new ROSLIB.Goal({
       actionClient : that.actionClient,
@@ -143,7 +174,7 @@ var Vmap = function (a) {
       }
     });
     goal.send();
-    var posTmp = {x : (that.decaX + (pose.position.x*that.scale)), y : (that.decaY -(pose.position.y*that.scale))};
+    var posTmp = that.utils.rosToGlobal(pose.position.x,pose.position.y);
     var rotation = 165 + that.utils.rosQuaternionToGlobalTheta(pose.orientation);
     var goalMarker = document.createElementNS('http://www.w3.org/2000/svg','polygon');
     goalMarker.setAttribute('points',posTmp.x+","+posTmp.y+
@@ -154,17 +185,16 @@ var Vmap = function (a) {
     that.svg.appendChild(goalMarker);
     goal.on('result', function() {
       that.svg.removeChild(goalMarker);
+      that.eventsVar.pathMarker.setAttribute('points', "");
     });
   };
   this.mouseEventHandler = function(event, mouseState) {
       if (mouseState === 'down'){
-        // get position when mouse button is pressed down
         that.eventsVar.position = that.utils.globalToRos(event.layerX, event.layerY);
         that.eventsVar.positionVec3 = new ROSLIB.Vector3(that.eventsVar.position);
         that.eventsVar.mouseDown = true;
       }
       else if (mouseState === 'move'){
-        // remove obsolete orientation marker
         if (event.timeStamp - that.eventsVar.lastTimeStamp < 25) {
           return;
         } else {
@@ -196,12 +226,7 @@ var Vmap = function (a) {
           that.eventsVar.orientationMarker.setAttribute('style',"fill:red;stroke:red;stroke-width:1;transform-origin:"+
           posTmp.x+"px "+posTmp.y+"px;transform:rotate("+(165+that.eventsVar.thetaDegrees)+"deg)");
         }
-      } else if (that.eventsVar.mouseDown) { // mouseState === 'up'
-        // if mouse button is released
-        // - get current mouse position (goalPos)
-        // - calulate direction between stored <position> and goal position
-        // - set pose with orientation
-        // - send goal
+      } else if (that.eventsVar.mouseDown) {
         that.eventsVar.mouseDown = false;
         if (that.eventsVar.orientationMarker !== null) {
           that.svg.removeChild(that.eventsVar.orientationMarker);
