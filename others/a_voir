@@ -9,3 +9,8 @@
 /mobile_base/sensors/bumper_pointcloud
 /mobile_base/version_info
 /robot_pose
+
+
+
+rostopic echo /laptop_charge
+rostopic echo /mobile_base/sensors/core
