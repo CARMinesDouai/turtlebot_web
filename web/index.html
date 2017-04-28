@@ -17,6 +17,43 @@
     <li class="tab"><a onclick="viewerJs.changeView(this)">map</a></li><li class="tab"><a onclick="viewerJs.changeView(this)">vmap</a></li>
     <div id="indicator"></div>
   </ul>
+  <div class="stuffViewer">
+    <div class="status">
+      <p class="header">Status</p>
+      <ul class="progress">
+        <li id="laptopBat" data-name="Laptop battery" data-percent="13%"> <svg viewBox="-10 -10 220 220">
+          <g fill="none" stroke-width="10" transform="translate(100,100)" stroke="rgba(0,184,222,0.7)">
+            <path d="M 0,-100 A 100,100 0 0,1 86.6,-50"/>
+            <path d="M 86.6,-50 A 100,100 0 0,1 86.6,50"/>
+            <path d="M 86.6,50 A 100,100 0 0,1 0,100"/>
+            <path d="M 0,100 A 100,100 0 0,1 -86.6,50"/>
+            <path d="M -86.6,50 A 100,100 0 0,1 -86.6,-50"/>
+            <path d="M -86.6,-50 A 100,100 0 0,1 0,-100"/>
+          </g>
+          </svg> <svg viewBox="-10 -10 220 220">
+          <path d="M200,100 C200,44.771525 155.228475,0 100,0 C44.771525,0 0,44.771525 0,100 C0,155.228475 44.771525,200 100,200 C155.228475,200 200,155.228475 200,100 Z" stroke-dashoffset="81"></path>
+          </svg>
+        </li>
+        <li id="botBat" data-name="Bot battery" data-percent="100%"> <svg viewBox="-10 -10 220 220">
+          <g fill="none" stroke-width="10" transform="translate(100,100)" stroke="rgba(0,184,222,0.7)">
+            <path d="M 0,-100 A 100,100 0 0,1 86.6,-50"/>
+            <path d="M 86.6,-50 A 100,100 0 0,1 86.6,50"/>
+            <path d="M 86.6,50 A 100,100 0 0,1 0,100"/>
+            <path d="M 0,100 A 100,100 0 0,1 -86.6,50"/>
+            <path d="M -86.6,50 A 100,100 0 0,1 -86.6,-50"/>
+            <path d="M -86.6,-50 A 100,100 0 0,1 0,-100"/>
+          </g>
+          </svg>
+          <svg viewBox="-10 -10 220 220">
+            <path d="M200,100 C200,44.771525 155.228475,0 100,0 C44.771525,0 0,44.771525 0,100 C0,155.228475 44.771525,200 100,200 C155.228475,200 200,155.228475 200,100 Z" stroke-dashoffset="81"></path>
+          </svg>
+        </li>
+      </ul>
+    </div>
+    <div class="controls">
+      <p class="header">Controls</p>
+    </div>
+  </div>
   <div id="viewer">
     <div id="map"></div>
     <div id="vmap"></div>
@@ -61,6 +98,30 @@
   });
   map1.init();
   vmap1.init();
+
+  var botBattery = new ROSLIB.Topic({
+    ros : ros,
+    name : '/mobile_base/sensors/core',
+    messageType : 'kobuki_msgs/SensorState'
+  });
+  botBattery.subscribe(function(sensor_msgs) {
+    console.log(sensor_msgs);
+    botBattery.unsubscribe();
+  });
+  var laptopBattery = new ROSLIB.Topic({
+    ros : ros,
+    name : '/laptop_charge',
+    messageType : 'sensor_msgs/BatteryState'
+  });
+  laptopBattery.subscribe(function(sensor_msgs) {
+    console.log(sensor_msgs);
+    console.log(sensor_msgs.percentage);
+    laptopBattery.unsubscribe();
+  });
+  var botBat = document.getElementById('botBat');
+  console.log(botBat.dataset.percent);
+  console.log(botBat.children[1].children[0].getAttribute('stroke-dashoffset'));
+  console.log(botBat.children[0].children[0].getAttribute('stroke'));
   </script>
 </body>
 </html>
