@@ -38,37 +38,46 @@ var Vmap = function (a) {
     serverName : that.serverName
   });
   this.transMatrix = [1,0,0,1,0,0];
+  this.subscribe = {};
+  this.subscriber = {
+    botPos : function () {
+      that.subscribe.botPos.subscribe(function(pos) {
+        var botSVGPos = document.getElementById('bot');
+        if (botSVGPos === null) {
+          return;
+        }
+        that.botPos = that.utils.rosToGlobal(pos.position.x,pos.position.y);
+        botSVGPos.setAttribute("cx",that.botPos.x);
+        botSVGPos.setAttribute("cy",that.botPos.y);
+      });
+    },
+    map : function () {
+      that.subscribe.map.subscribe(function(message) {
+        that.svg.innerHTML=that.toSVG(message);
+        if (!that.continuous) {
+          that.subscribe.map.unsubscribe();
+        }
+      });
+    }
+  };
   this.init = function () {
     document.getElementById(that.divID).innerHTML =
     "<svg id='svg_vmap' transform='matrix(1 0 0 1 0 0)' height='0' width='0'></svg>";
     that.svg = document.getElementById('svg_vmap');
     that.initMeta();
     that.botPos = {x : that.decaX, y : that.decaY};
-    var bot_pos = new ROSLIB.Topic({
+    that.subscribe.botPos = new ROSLIB.Topic({
       ros : that.ros,
       name : '/robot_pose',
       messageType : 'geometry_msgs/Pose'
     });
-    bot_pos.subscribe(function(pos) {
-      var botSVGPos = document.getElementById('bot');
-      if (botSVGPos === null) {
-        return;
-      }
-      that.botPos = that.utils.rosToGlobal(pos.position.x,pos.position.y);
-      botSVGPos.setAttribute("cx",that.botPos.x);
-      botSVGPos.setAttribute("cy",that.botPos.y);
-    });
-    var map = new ROSLIB.Topic({
+    that.subscribe.map = new ROSLIB.Topic({
       ros : that.ros,
       name : '/vmap',
       messageType : 'torob_msgs/VectorMap'
     });
-    map.subscribe(function(message) {
-      that.svg.innerHTML=that.toSVG(message);
-      if (!that.continuous) {
-        map.unsubscribe();
-      }
-    });
+    that.subscriber.botPos();
+    that.subscriber.map();
     that.navPlan = new ROSLIB.Topic({
       ros : that.ros,
       name : '/move_base/NavfnROS/plan',
@@ -150,14 +159,11 @@ var Vmap = function (a) {
           that.svg.appendChild(that.eventsVar.pathMarker);
         }
         var points = "";
-        console.log(path);
-        console.log(path.poses);
         for (pathPose of path.poses) {
           var posTmp = that.utils.rosToGlobal(pathPose.pose.position.x,pathPose.pose.position.y);
           points += posTmp.x+","+posTmp.y+" ";
         }
         that.eventsVar.pathMarker.setAttribute('points', points);
-        console.log(that.eventsVar.pathMarker);
         that.navPlan.unsubscribe();
       });
     }
@@ -279,6 +285,15 @@ var Vmap = function (a) {
     var newMatrix = "matrix(" +  that.transMatrix.join(' ') + ")";
     that.svg.setAttributeNS(null, "transform", newMatrix);
   };
+  this.unsubscribe = function () {
+    that.subscribe.botPos.unsubscribe();
+    that.subscribe.map.unsubscribe();
+  };
+  this.subscribe = function () {
+    that.subscriber.botPos();
+    that.subscriber.map();
+  }
+  this.init();
 };
   // arg : torob_msgs/VectorMap
   // var toto = document.getElementById("1");

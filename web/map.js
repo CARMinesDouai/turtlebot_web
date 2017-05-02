@@ -4,6 +4,8 @@ var Map = function (a) {
   this.continuous = a.continuous || false;
   this.divID = a.divID || 'map';
   this.withOrientation = a.withOrientation || true;
+  this.serverName = a.serverName || '/move_base';
+  this.actionName = a.actionName || 'move_base_msgs/MoveBaseAction';
   this.viewer = new ROS2D.Viewer({
     divID : that.divID,
     width : 1000,
@@ -13,17 +15,9 @@ var Map = function (a) {
   this.init = function () {
     that.initMeta();
     setTimeout(function () {
-      that.zoomView = new ROS2D.ZoomView({rootObject : that.viewer.scene,minScale : that.resolution});
-      that.zoomView.startZoom(0,1000);
-      that.zoomView.zoom(that.scale);
-      that.viewer.shift(-that.viewer.width/(that.scale*2),((that.viewer.height/2.0)-1000)/that.scale);
-      that.nav = NAV2D.OccupancyGridClientNav({
-        ros : that.ros,
-        rootObject : that.viewer.scene,
-        continuous : that.continuous,
-        withOrientation : that.withOrientation
-      });
-    }, 1000);
+      that.viewer.scene.children[2].scaleX = that.viewer.scene.children[2].scaleY = 0.02;
+    },2000);
+
   };
   this.initMeta = function () {
     var map_metadata = new ROSLIB.Topic({
@@ -38,6 +32,24 @@ var Map = function (a) {
       that.viewer.height = that.viewer.scene.canvas.height = meta.height;
       that.scale = 1/that.resolution;
       map_metadata.unsubscribe();
+      if (that.zoomView === undefined) {
+        that.nav = new NAV2D.OccupancyGridClientNav({
+          ros : that.ros,
+          viewer : {
+            scaleToDimensions : function () {},
+            shift : function () {}
+          },
+          rootObject : that.viewer.scene,
+          continuous : that.continuous,
+          withOrientation : that.withOrientation,
+          actionName : that.actionName,
+          serverName : that.serverName
+        });
+        that.zoomView = new ROS2D.ZoomView({rootObject : that.viewer.scene,minScale : that.resolution});
+        that.zoomView.startZoom(0,1000);
+        that.zoomView.zoom(that.scale);
+        that.viewer.shift(-that.viewer.width/(that.scale*2),((that.viewer.height/2.0)-1000)/that.scale);
+      }
     });
   };
   this.zoom = function (scale) {
@@ -53,4 +65,5 @@ var Map = function (a) {
       that.viewer.scene.canvas.height += that.viewer.height * (scale-1);
     }
   };
+  this.init();
 }
