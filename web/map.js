@@ -4,6 +4,7 @@ var Map = function (a) {
   this.continuous = a.continuous || false;
   this.divID = a.divID || 'map';
   this.withOrientation = a.withOrientation || true;
+  this.showPath = a.showPath || false;
   this.serverName = a.serverName || '/move_base';
   this.actionName = a.actionName || 'move_base_msgs/MoveBaseAction';
   this.viewer = new ROS2D.Viewer({
@@ -14,9 +15,15 @@ var Map = function (a) {
   });
   this.init = function () {
     that.initMeta();
+    that.navPlan = new ROSLIB.Topic({
+      ros : that.ros,
+      name : '/move_base/NavfnROS/plan',
+      messageType : 'nav_msgs/Path'
+    });
     setTimeout(function () {
       that.viewer.scene.children[2].scaleX = that.viewer.scene.children[2].scaleY = 0.02;
     },2000);
+
 
   };
   this.initMeta = function () {
@@ -65,5 +72,36 @@ var Map = function (a) {
       that.viewer.scene.canvas.height += that.viewer.height * (scale-1);
     }
   };
+  this.viewer.scene.canvas.onmouseup = function (event) {
+    console.log(event);
+    if (that.showPath) {
+      that.navPlan.subscribe(function(path) {
+        if (that.pathMarker != null) {
+          that.viewer.scene.removeChild(that.pathMarker);
+        }
+        that.pathMarker = new ROS2D.TraceShape({
+          strokeSize : that.resolution,
+          strokeColor : createjs.Graphics.getRGB(255, 0, 0),
+          maxPoses : 0
+        });
+        for (pathPose of path.poses) {
+          that.pathMarker.addPose(pathPose.pose);
+        }
+        that.viewer.scene.addChild(that.pathMarker);
+        var tmpLength = that.viewer.scene.children.length;
+        var ret = true;
+        var tmpFun = function (length) {
+          ret = length == that.viewer.scene.children.length;
+          if (ret) {
+            setTimeout(function () {tmpFun(length);},500);
+          } else {
+            that.viewer.scene.removeChild(that.pathMarker);
+          }
+        };
+        tmpFun(tmpLength);
+        that.navPlan.unsubscribe();
+      });
+    }
+  }
   this.init();
 }
