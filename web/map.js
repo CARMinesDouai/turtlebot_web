@@ -91,7 +91,7 @@ var Map = function (a) {
         var tmpLength = that.viewer.scene.children.length;
         var ret = true;
         var tmpFun = function (length) {
-          ret = length == that.viewer.scene.children.length;
+          ret = length >= that.viewer.scene.children.length;
           if (ret) {
             setTimeout(function () {tmpFun(length);},500);
           } else {
