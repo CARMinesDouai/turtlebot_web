@@ -4,6 +4,7 @@ var Vmap = function (a) {
   this.continuous = a.continuous || false;
   this.divID = a.divID || 'vmap';
   this.showPath = a.showPath || false;
+  this.settingPose = false;
   this.utils =  { rosQuaternionToGlobalTheta : function(orientation) {
                     var q0 = orientation.w;
                     var q1 = orientation.x;
@@ -183,9 +184,9 @@ var Vmap = function (a) {
     var posTmp = that.utils.rosToGlobal(pose.position.x,pose.position.y);
     var rotation = 165 + that.utils.rosQuaternionToGlobalTheta(pose.orientation);
     var goalMarker = document.createElementNS('http://www.w3.org/2000/svg','polygon');
-    goalMarker.setAttribute('points',posTmp.x+","+posTmp.y+
-                      " "+(posTmp.x + 10)+","+posTmp.y+
-                      " "+(posTmp.x + 8.76)+","+(posTmp.y + 4.42));
+    goalMarker.setAttribute('points',(posTmp.x - 7)+","+(posTmp.y - 2.21)+
+                      " "+(posTmp.x + 3)+","+(posTmp.y - 2.21)+
+                      " "+(posTmp.x + 1.76)+","+(posTmp.y + 2.21));
     goalMarker.setAttribute('style',"fill:#39bda7;stroke:#39bda7;stroke-width:1;transform-origin:"+
     posTmp.x+"px "+posTmp.y+"px;transform:rotate("+rotation+"deg)");
     that.svg.appendChild(goalMarker);
@@ -194,9 +195,43 @@ var Vmap = function (a) {
       that.eventsVar.pathMarker.setAttribute('points', "");
     });
   };
+  this.setPose = function (pose) {
+    var cmdVel = new ROSLIB.Topic({
+      ros : ros,
+      name : '/initialpose',
+      messageType : 'geometry_msgs/PoseWithCovarianceStamped'
+    });
+    var currentTime = new Date();
+    var secs = Math.floor(currentTime.getTime()/1000);
+    var nsecs = Math.round(1000000000*(currentTime.getTime()/1000-secs));
+    var initialpose = new ROSLIB.Message({
+      header: {
+        seq: 0,
+        stamp: {
+          secs: secs,
+          nsecs: nsecs
+        },
+        frame_id: 'map'
+      },
+      pose : {pose : pose,
+              covariance: [0.25, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.25, 0.0, 0.0, 0.0, 0.0,
+                   0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+                   0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.06853891945200942]
+             }
+    });
+    cmdVel.publish(initialpose);
+    that.settingPose = false;
+  };
   this.mouseEventHandler = function(event, mouseState) {
+    event.preventDefault();
       if (mouseState === 'down'){
-        that.eventsVar.position = that.utils.globalToRos(event.layerX, event.layerY);
+        if (event.target.id == "svg_vmap") {
+          that.eventsVar.position = that.utils.globalToRos(event.layerX, event.layerY);
+        } else {
+          var point = event.target.getAttribute('points').split(" ")[0].split(",");
+          point = {x : parseInt(point[0])+event.layerX, y : parseInt(point[1])+event.layerY};
+          that.eventsVar.position = that.utils.globalToRos(point.x, point.y);
+        }
         that.eventsVar.positionVec3 = new ROSLIB.Vector3(that.eventsVar.position);
         that.eventsVar.mouseDown = true;
       }
@@ -207,7 +242,13 @@ var Vmap = function (a) {
           that.eventsVar.lastTimeStamp = event.timeStamp;
         }
         if ( that.eventsVar.mouseDown === true) {
-          var currentPos = that.utils.globalToRos(event.layerX, event.layerY);
+          if (event.target.id == "svg_vmap") {
+            var currentPos = that.utils.globalToRos(event.layerX, event.layerY);
+          } else {
+            var point = event.target.getAttribute('points').split(" ")[0].split(",");
+            point = {x : parseInt(point[0])+event.layerX, y : parseInt(point[1])+event.layerY};
+            var currentPos = that.utils.globalToRos(point.x, point.y);
+          }
           var currentPosVec3 = new ROSLIB.Vector3(currentPos);
 
           if (that.eventsVar.orientationMarker === null) {
@@ -226,9 +267,9 @@ var Vmap = function (a) {
           var posTmp = {x : (that.decaX + (that.eventsVar.positionVec3.x*that.scale)),
             y : (that.decaY -(that.eventsVar.positionVec3.y*that.scale))};
 
-          that.eventsVar.orientationMarker.setAttribute('points',posTmp.x+","+posTmp.y+
-                            " "+(posTmp.x + 10)+","+posTmp.y+
-                            " "+(posTmp.x + 8.76)+","+(posTmp.y + 4.42));
+          that.eventsVar.orientationMarker.setAttribute('points',(posTmp.x - 7)+","+(posTmp.y - 2.21)+
+                            " "+(posTmp.x + 3)+","+(posTmp.y - 2.21)+
+                            " "+(posTmp.x + 1.76)+","+(posTmp.y + 2.21));
           that.eventsVar.orientationMarker.setAttribute('style',"fill:red;stroke:red;stroke-width:1;transform-origin:"+
           posTmp.x+"px "+posTmp.y+"px;transform:rotate("+(165+that.eventsVar.thetaDegrees)+"deg)");
         }
@@ -238,9 +279,13 @@ var Vmap = function (a) {
           that.svg.removeChild(that.eventsVar.orientationMarker);
           that.eventsVar.orientationMarker = null;
         }
-
-        var goalPos = that.utils.globalToRos(event.layerX, event.layerY);
-
+        if (event.target.id == "svg_vmap") {
+          var goalPos = that.utils.globalToRos(event.layerX, event.layerY);
+        } else {
+          var point = event.target.getAttribute('points').split(" ")[0].split(",");
+          point = {x : parseInt(point[0])+event.layerX, y : parseInt(point[1])+event.layerY};
+          var goalPos = that.utils.globalToRos(point.x, point.y);
+        }
         var goalPosVec3 = new ROSLIB.Vector3(goalPos);
 
         that.eventsVar.xDelta =  goalPosVec3.x - that.eventsVar.positionVec3.x;
@@ -263,7 +308,11 @@ var Vmap = function (a) {
           position :    that.eventsVar.positionVec3,
           orientation : orientation
         });
-        that.sendGoal(pose);
+        if (that.settingPose) {
+          that.setPose(pose);
+        } else {
+          that.sendGoal(pose);
+        }
       }
     };
   this.zoom = function (scale) {
