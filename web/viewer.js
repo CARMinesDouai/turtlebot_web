@@ -8,7 +8,9 @@ var Viewer = function (a) {
     document.getElementById('indicator').style.left = event.offsetLeft+'px';
     var v = document.getElementById('viewer').children;
     for (var i=0; i<v.length; i++) {
-      v[i].style.display = 'none';
+      if (v[i].id != event.innerHTML) {
+        v[i].style.display = 'none';
+      }
     }
     that.currentView = event.innerHTML;
     document.getElementById(event.innerHTML).style.display = 'block';
