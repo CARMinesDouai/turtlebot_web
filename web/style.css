@@ -10,167 +10,192 @@ html, body {
   font-family: "Roboto", sans-serif;
   font-weight: normal;
 }
-@media (orientation: landscape) {
-  #viewer {
-    height:90vh;
-    width:70vw;
-    float: left;
-    overflow: hidden;
-    margin-left: 5vh;
-    background-color: #fff;
-  }
-  #map, #vmap {
-    height:102%;
-    width:102%;
-    overflow: scroll;
-  }
-  #map {
-    background-color: #7F7F7F;
-  }
-  .tabs {
-    float: left;
-    padding-left: 0;
-    position: relative;
-    overflow-x: auto;
-    overflow-y: hidden;
-    height: 48px;
-    width: 70vw;
-    background-color: #fff;
-    margin: 3vh 0 1px 5vh;
-  }
-  .tabs, #viewer, #controls button, #status, .stuffViewer .header {
-    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.28),0 1px 5px 0 rgba(0,0,0,0.24),0 3px 1px -2px rgba(0,0,0,0.4);
-  }
-  .tabs .tab {
-    display: inline-block;
-    text-align: center;
-    line-height: 48px;
-    height: 48px;
-    text-transform: uppercase;
-  }
-  .tabs .tab a {
-    color: rgba(0,184,222,0.7);
-    display: block;
-    width: 100%;
-    height: 100%;
-    padding: 0 24px;
-    font-size: 14px;
-    overflow: hidden;
-    text-decoration: none;
-    transition: color .28s ease;
-    cursor: pointer;
-  }
-  .tabs  .tab {
-    padding: 0 48px 0 0;
-  }
-  .tabs .tab a:hover {
-    background-color: transparent;
-    color: #ee6e73;
-  }
-  .tabs #indicator {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 126px;
-    height: 3px;
-    transition: all 0.5s;
-    background-color: rgba(0,184,222,0.7);
-  }
-  #controls {
-    position: absolute;
-    top: 92vh;
-    z-index: 3;
-    left: 60vw;
-  }
-  #controls button {
-    border-radius: 25px;
-    border: none;
-    transition: all 0.5s;
-    width: 48px;
-    height: 48px;
-    text-align: center;
-  }
-  #controls button:hover {
-    background-color: #5F5F5F;
-    color: rgb(0,184,222);
-    box-shadow: 0 2px 2px 0 rgba(0,184,222,0.28),0 1px 5px 0 rgba(0,184,222,0.24),0 3px 1px -2px rgba(0,184,222,0.4);
-  }
-  .stuffViewer {
-    float: right;
-    width: 22.5vw;
-    margin: 3vh 5vh 1px 0;
-    height: 70vh;
-  }
+#viewer {
+  height:90vh;
+  width:70vw;
+  float: left;
+  overflow: hidden;
+  margin-left: 2.5vw;
+  background-color: #fff;
+}
+#map, #vmap {
+  height:102%;
+  width:102%;
+  overflow: scroll;
+}
+#map {
+  background-color: #7F7F7F;
+}
+.tabs {
+  float: left;
+  padding-left: 0;
+  position: relative;
+  overflow-x: auto;
+  overflow-y: hidden;
+  height: 48px;
+  width: 70vw;
+  background-color: #fff;
+  margin: 3vh 0 1px 2.5vw;
+}
+.tabs, #viewer, #controls button, #status, .stuffViewer .header, .btn {
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,0.28),0 1px 5px 0 rgba(0,0,0,0.24),0 3px 1px -2px rgba(0,0,0,0.4);
+}
+.tabs .tab {
+  display: inline-block;
+  text-align: center;
+  line-height: 48px;
+  height: 48px;
+  text-transform: uppercase;
+}
+.tabs .tab a {
+  color: rgba(0,184,222,0.7);
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0 24px;
+  font-size: 14px;
+  overflow: hidden;
+  text-decoration: none;
+  transition: color .28s ease;
+  cursor: pointer;
+}
+.tabs  .tab {
+  padding: 0 48px 0 0;
+}
+.tabs .tab a:hover {
+  background-color: transparent;
+  color: #ee6e73;
+}
+.tabs #indicator {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 126px;
+  height: 3px;
+  transition: all 0.5s;
+  background-color: rgba(0,184,222,0.7);
+}
+#controls {
+  position: absolute;
+  top: 92vh;
+  z-index: 3;
+  left: 60vw;
+}
+#controls button {
+  border-radius: 25px;
+  border: none;
+  transition: all 0.5s;
+  width: 48px;
+  height: 48px;
+  text-align: center;
+}
+#controls button:hover {
+  background-color: #5F5F5F;
+  color: rgb(0,184,222);
+  box-shadow: 0 2px 2px 0 rgba(0,184,222,0.28),0 1px 5px 0 rgba(0,184,222,0.24),0 3px 1px -2px rgba(0,184,222,0.4);
+}
+.stuffViewer {
+  float: right;
+  width: 22.5vw;
+  margin: 3vh 2.5vw 1px 0;
+  height: 70vh;
+}
 
-  .stuffViewer #status, .stuffViewer .controls {
-    background: #fff;
-    margin-bottom: 2vh;
-  }
+.stuffViewer #status, .stuffViewer .controls {
+  background: #fff;
+  margin-bottom: 2vh;
+}
 
-  .stuffViewer .header {
-    height: 48px;
-    background: #fff;
-    margin: 0;
-    padding: 0;
-    line-height: 48px;
-    padding: 0 24px;
-    font-size: 14px;
-    text-transform: uppercase;
-    color: rgba(0,184,222,0.7);
-  }
-  @keyframes
-  load { 0% {
+.stuffViewer .header {
+  height: 48px;
+  background: #fff;
+  margin: 0;
+  padding: 0;
+  line-height: 48px;
+  padding: 0 24px;
+  font-size: 14px;
+  text-transform: uppercase;
+  color: rgba(0,184,222,0.7);
+}
+@keyframes
+load { 0% {
   stroke-dashoffset:0
-  }
-  }
-  .progress {
-    padding: 1vh 0;
-    margin: 1vh 1.25vw;
-    height: 17vh;
-  }
-  .progress>li {
+}
+}
+.progress {
+  padding: 1vh 0;
+  margin: 1vh 1.25vw;
+  height: 17vh;
+}
+.progress>li {
+  display: inline-block;
+  position: relative;
+  text-align: center;
+  color: #93A2AC;
+  float: left;
+}
+
+.progress>li:before {
+  content: attr(data-name);
+  position: absolute;
+  width: 100%;
+  bottom: -2vh;
+  font-weight: 300;
+  font-size: 1vw;
+}
+
+.progress>li:after {
+  content: attr(data-percent);
+  position: absolute;
+  width: 100%;
+  top: 5.5vh;
+  left: 0;
+  font-size: 2.5vh;
+  text-align: center;
+}
+
+.progress svg {
+  width: 10vw;
+  height: 15vh;
+}
+
+.progress svg:nth-child(2) {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform: rotate(-90deg);
+}
+
+.progress svg:nth-child(2) path {
+  fill: none;
+  stroke-width: 25;
+  stroke-dasharray: 629;
+  stroke: rgba(255, 255, 255, 0.9);
+  animation: load 10s;
+}
+
+.btn, .btn-large {
+    text-decoration: none;
+    color: #fff;
+    background-color: rgb(0,184,222);
+    text-align: center;
+    letter-spacing: .5px;
+    transition: .2s ease-out;
+    cursor: pointer;
+    margin : 1vw;
+}
+.btn, .btn-large, .btn-floating, .btn-large, .btn-flat {
+    font-size: 1vw;
+    outline: 0;
+}
+.btn, .btn-large, .btn-flat {
+    border: none;
+    border-radius: 2px;
     display: inline-block;
-    position: relative;
-    text-align: center;
-    color: #93A2AC;
-    float: left;
-  }
-
-  .progress>li:before {
-    content: attr(data-name);
-    position: absolute;
-    width: 100%;
-    bottom: -2vh;
-    font-weight: 300;
-  }
-
-  .progress>li:after {
-    content: attr(data-percent);
-    position: absolute;
-    width: 100%;
-    top: 5.5vh;
-    left: 0;
-    font-size: 2.5vh;
-    text-align: center;
-  }
-
-  .progress svg {
-    width: 10vw;
-    height: 15vh;
-  }
-
-  .progress svg:nth-child(2) {
-    position: absolute;
-    left: 0;
-    top: 0;
-    transform: rotate(-90deg);
-  }
-
-  .progress svg:nth-child(2) path {
-    fill: none;
-    stroke-width: 25;
-    stroke-dasharray: 629;
-    stroke: rgba(255, 255, 255, 0.9);
-    animation: load 10s;
-  }
+    height: 36px;
+    line-height: 36px;
+    padding: 0 0.75vw;
+    text-transform: uppercase;
+    vertical-align: middle;
+    -webkit-tap-highlight-color: transparent;
 }

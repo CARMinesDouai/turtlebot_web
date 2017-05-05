@@ -48,8 +48,12 @@ var Vmap = function (a) {
           return;
         }
         that.botPos = that.utils.rosToGlobal(pos.position.x,pos.position.y);
-        botSVGPos.setAttribute("cx",that.botPos.x);
-        botSVGPos.setAttribute("cy",that.botPos.y);
+        var rotation = 165 + that.utils.rosQuaternionToGlobalTheta(pos.orientation);
+        botSVGPos.setAttribute('points',(that.botPos.x - 7)+","+(that.botPos.y - 2.21)+
+                          " "+(that.botPos.x + 3)+","+(that.botPos.y - 2.21)+
+                          " "+(that.botPos.x + 1.76)+","+(that.botPos.y + 2.21));
+        botSVGPos.setAttribute('style',"fill:blue;stroke:blue;stroke-width:1;transform-origin:"+
+                          posTmp.x+"px "+posTmp.y+"px;transform:rotate("+rotation+"deg)");
       });
     },
     map : function () {
@@ -123,7 +127,7 @@ var Vmap = function (a) {
     var edges = matrix.edges;
     var nodes = matrix.nodes;
     SVG += " <circle cx='"+that.decaX+"' cy='"+that.decaY+"' r='1' stroke='black' stroke-width='3' />";
-    SVG += " <circle id='bot' cx='"+that.decaX+"' cy='"+that.decaY+"' r='1' stroke='blue' stroke-width='3' />";
+    SVG += "<polygon id='bot'></polygon>"
     for (var i = 0; i < edges.length; i++) {
       SVG += that.edgeToSVG(   i,
         {

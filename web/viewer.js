@@ -22,4 +22,11 @@ var Viewer = function (a) {
       that.vmap.zoom(scale);
     }
   };
+  this.setPose = function () {
+    if (that.currentView == that.map.divID) {
+      that.map.settingPose = !that.map.settingPose;
+    } else if (that.currentView == that.vmap.divID) {
+      that.vmap.settingPose = !that.vmap.settingPose;
+    }
+  };
 };
