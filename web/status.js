@@ -12,6 +12,12 @@ var Status = function (a) {
     topicName : a.laptopTopicName || '/laptop_charge',
     topicType : a.laptopTopicType || 'sensor_msgs/BatteryState'
   }
+  this.updateInterInit = a.updateInterInit || 300000;
+  this.color = a.color || {
+    good : 'rgba(0,184,222,0.7)',
+    warning : 'rgba(255,160,0,0.7)',
+    danger : 'rgba(255,24,0,0.7)'
+  };
   this.botBattery = new ROSLIB.Topic({
     ros : that.ros,
     name : that.botVar.topicName,
@@ -22,13 +28,7 @@ var Status = function (a) {
     name : that.lapVar.topicName,
     messageType : that.lapVar.topicType
   });
-  this.updateInterInit = 300000;
   this.updateInter = this.updateInterInit;
-  this.color = {
-    good : 'rgba(0,184,222,0.7)',
-    warning : 'rgba(255,160,0,0.7)',
-    danger : 'rgba(255,24,0,0.7)'
-  };
   this.init = function () {
     var para = document.createElement('p');
     para.setAttribute('class','header');
