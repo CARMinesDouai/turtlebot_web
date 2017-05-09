@@ -37,7 +37,7 @@ html, body {
   background-color: #fff;
   margin: 3vh 0 1px 2.5vw;
 }
-.tabs, #viewer, #controls button, #status, .stuffViewer .header, .btn {
+.tabs, #viewer, #controls button, #status, .stuffViewer .header, .btn,.controls, .joy {
   box-shadow: 0 2px 2px 0 rgba(0,0,0,0.28),0 1px 5px 0 rgba(0,0,0,0.24),0 3px 1px -2px rgba(0,0,0,0.4);
 }
 .tabs .tab {
@@ -79,7 +79,7 @@ html, body {
   position: absolute;
   top: 92vh;
   z-index: 3;
-  left: 60vw;
+  right: 28.5vw;
 }
 #controls button {
   border-radius: 25px;
@@ -93,6 +93,40 @@ html, body {
   background-color: #5F5F5F;
   color: rgb(0,184,222);
   box-shadow: 0 2px 2px 0 rgba(0,184,222,0.28),0 1px 5px 0 rgba(0,184,222,0.24),0 3px 1px -2px rgba(0,184,222,0.4);
+}
+#controls .joy {
+  border-radius: 75px;
+  border: none;
+  background-color: #fff;
+  width: 96px;
+  height: 96px;
+  float: right;
+  margin-top: -48px;
+  margin-left: 20px;
+}
+#controls .joy button {
+  background: none;
+  box-shadow: none;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+}
+#controls .joy button:nth-child(1) {
+  margin-left: 12px;
+}
+#controls .joy button:nth-child(2) {
+  float: left;
+  margin-top: 33px;
+  padding-bottom: 30px;
+}
+#controls .joy button:nth-child(3) {
+  float: right;
+  margin-top: 33px;
+  padding-bottom: 30px;
+}
+#controls .joy button:nth-child(4) {
+  margin-top: 42px;
+  margin-left: 12px;
 }
 .stuffViewer {
   float: right;

@@ -22,6 +22,24 @@ var Viewer = function (a) {
       that.vmap.zoom(scale);
     }
   };
+  this.scroll = function (ori,step) {
+    var doc = document.getElementById(that.currentView);
+    if (doc.scrollLeftMax == 0 && doc.scrollTopMax == 0) {
+      return;
+    }
+    var pas = step || 50;
+    if (ori == 'up') {
+      doc.scrollTop -= pas;
+    } else if (ori == 'left') {
+      doc.scrollLeft -= pas;
+    } else if (ori == 'right') {
+      doc.scrollLeft += pas;
+    } else if (ori == 'down') {
+      doc.scrollTop += pas;
+    } else {
+      console.log('invalid orientation');
+    }
+  };
   this.setPose = function () {
     if (that.currentView == that.map.divID) {
       that.map.settingPose = !that.map.settingPose;
