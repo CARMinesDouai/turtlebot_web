@@ -53,7 +53,7 @@ var Vmap = function (a) {
                           " "+(that.botPos.x + 3)+","+(that.botPos.y - 2.21)+
                           " "+(that.botPos.x + 1.76)+","+(that.botPos.y + 2.21));
         botSVGPos.setAttribute('style',"fill:blue;stroke:blue;stroke-width:1;transform-origin:"+
-                          posTmp.x+"px "+posTmp.y+"px;transform:rotate("+rotation+"deg)");
+                          that.botPos.x+"px "+that.botPos.y+"px;transform:rotate("+rotation+"deg)");
       });
     },
     map : function () {
