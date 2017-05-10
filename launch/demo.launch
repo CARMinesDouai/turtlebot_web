@@ -10,13 +10,17 @@
   <!-- conversion laser transform -->
   <node pkg="tf" type="static_transform_publisher" name="laser_in_base_link" args="0.03 0.0 0.0 0.0 0.0 0.0 /base_link /laser 100"/>
   <!-- map -->
-  <arg name="map_file" default="$(find turtlebot_web)/map/map.yaml"/>
+  <arg name="map_file" default="$(find turtlebot_web)/map/test1.yaml"/>
   <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
+  <!-- grid to vmap convertion -->
+  <node pkg="torob" type="map_to_vmap" name="torob_vmap">
+    <arg name="_map_topic" value="/map"/>
+  </node>
   <!-- amcl -->
   <arg name="use_map_topic"   value="true"/>
   <include file="$(find turtlebot_navigation)/launch/includes/amcl/amcl.launch.xml"/>
   <!-- launch move_base -->
-  <include file="$(find turtlebot_navigation)/launch/includes/move_base.launch.xml"/>
+  <include file="$(find turtlebot_web)/params/move_base.launch"/>
   <!-- joystick -->
   <node pkg="joy" type="joy_node" name="joy_node">
     <param name="joy_node/dev" value="/dev/input/js0"/>
@@ -27,4 +31,10 @@
   <node pkg="robot_pose_publisher" type="robot_pose_publisher" name="robot_pose_publisher"/>
   <!-- web -->
   <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch"/>
+  <!-- kinect -->
+  <include file="$(find freenect_launch)/launch/freenect.launch"/>
+  <!-- web video -->
+  <node pkg="web_video_server" type="web_video_server" name="web_video_server">
+    <param name="port" value="8081"/>
+  </node>
 </launch>

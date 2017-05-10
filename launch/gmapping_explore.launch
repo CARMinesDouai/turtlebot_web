@@ -8,7 +8,7 @@
     <param name="angle_max" value="1.6"/>
   </node>
   <!-- conversion laser transform -->
-  <node pkg="tf" type="static_transform_publisher" name="laser_in_base_link" args="0.03 0.0 0.0 0.0 0.0 0.0 /base_link /laser 80"/>
+  <node pkg="tf" type="static_transform_publisher" name="laser_in_base_link" args="0.03 0.0 0.0 0.0 0.0 0.0 /base_link /laser 100"/>
   <!-- gmapping -->
   <include file="$(find turtlebot_navigation)/launch/includes/gmapping/gmapping.launch.xml"/>
   <!-- launch move_base -->
