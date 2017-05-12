@@ -10,7 +10,7 @@
   <!-- conversion laser transform -->
   <node pkg="tf" type="static_transform_publisher" name="laser_in_base_link" args="0.03 0.0 0.0 0.0 0.0 0.0 /base_link /laser 100"/>
   <!-- map -->
-  <arg name="map_file" default="$(find turtlebot_web)/map/test1.yaml"/>
+  <arg name="map_file" default="$(find turtlebot_web)/map/map_floor.yaml"/>
   <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
   <!-- grid to vmap convertion -->
   <node pkg="torob" type="map_to_vmap" name="torob_vmap">

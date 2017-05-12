@@ -11,7 +11,7 @@ var Camera = function (a) {
   this.subscribe = function () {
     if (that.viewer == null) {
       that.viewer = document.createElement('img');
-      that.viewer.setAttribute('src',"http://localhost:8081/stream?topic=/camera/rgb/image_color");
+      that.viewer.setAttribute('src',"http://"+location.hostname+":8081/stream?topic=/camera/rgb/image_color");
     }
     document.getElementById(that.divID).appendChild(that.viewer);
   };
