@@ -7,6 +7,7 @@ var Camera = function (a) {
       return;
     }
     document.getElementById(that.divID).removeChild(that.viewer);
+    that.viewer == null;
   };
   this.subscribe = function () {
     if (that.viewer == null) {
