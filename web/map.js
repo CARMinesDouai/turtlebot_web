@@ -102,6 +102,12 @@ var Map = function (a) {
         that.navPlan.unsubscribe();
       });
     }
-  }
+  };
+  this.subscribe = function () {
+
+  };
+  this.unsubscribe = function () {
+
+  };
   this.init();
 }

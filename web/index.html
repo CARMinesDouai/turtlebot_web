@@ -12,10 +12,11 @@
   <script type="text/javascript" src="map.js"></script>
   <script type="text/javascript" src="viewer.js"></script>
   <script type="text/javascript" src="status.js"></script>
+  <script type="text/javascript" src="camera.js"></script>
 </head>
 <body>
   <ul class="tabs">
-    <li class="tab"><a onclick="viewerJs.changeView(this)">map</a></li><li class="tab"><a onclick="viewerJs.changeView(this)">vmap</a></li>
+    <li class="tab"><a onclick="viewerJs.changeView(this)">map</a></li><li class="tab"><a onclick="viewerJs.changeView(this)">vmap</a></li><li class="tab"><a onclick="viewerJs.changeView(this)">camera</a></li>
     <div id="indicator"></div>
   </ul>
   <div class="stuffViewer">
@@ -29,6 +30,7 @@
   <div id="viewer">
     <div id="map"></div>
     <div id="vmap"></div>
+    <div id="camera"></div>
   </div>
   <div id="controls">
     <button type="button" onclick="viewerJs.zoom(1.25)">+</button>
@@ -71,9 +73,11 @@
     continuous : true,
     showPath : true
   });
+  var camera1 = new Camera();
   var viewerJs = new Viewer({
     map : map1,
-    vmap : vmap1
+    vmap : vmap1,
+    camera : camera1
   });
   var status1 = new Status({
     ros : ros

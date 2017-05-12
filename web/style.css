@@ -18,7 +18,7 @@ html, body {
   margin-left: 2.5vw;
   background-color: #fff;
 }
-#map, #vmap {
+#map, #vmap, #camera {
   height:102%;
   width:102%;
   overflow: scroll;

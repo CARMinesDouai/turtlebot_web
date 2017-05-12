@@ -345,7 +345,7 @@ var Vmap = function (a) {
   this.subscribe = function () {
     that.subscriber.botPos();
     that.subscriber.map();
-  }
+  };
   this.init();
 };
   // arg : torob_msgs/VectorMap

@@ -2,6 +2,7 @@ var Viewer = function (a) {
   var that  = this;
   this.map =  a.map;
   this.vmap = a.vmap;
+  this.camera = a.camera;
   this.currentView = this.map.divID;
   this.changeView = function (event) {
     document.getElementById('indicator').style.width = event.clientWidth+'px';
@@ -10,10 +11,12 @@ var Viewer = function (a) {
     for (var i=0; i<v.length; i++) {
       if (v[i].id != event.innerHTML) {
         v[i].style.display = 'none';
+        that[v[i].id].unsubscribe();
       }
     }
     that.currentView = event.innerHTML;
-    document.getElementById(event.innerHTML).style.display = 'block';
+    document.getElementById(that.currentView).style.display = 'block';
+    that[that.currentView].subscribe();
   };
   this.zoom = function (scale) {
     if (that.currentView == that.map.divID) {
