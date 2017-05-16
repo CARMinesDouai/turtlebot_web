@@ -31,4 +31,22 @@
   <node pkg="robot_pose_publisher" type="robot_pose_publisher" name="robot_pose_publisher"/>
   <!-- web -->
   <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch"/>
+  <!-- kinect -->
+  <include file="$(find freenect_launch)/launch/freenect.launch">
+    <arg name="depth_registration" value="true" /> 
+    <arg name="rgb_processing"                  value="true" />
+    <arg name="ir_processing"                   value="false" />
+    <arg name="depth_processing"                value="false" />
+    <arg name="depth_registered_processing"     value="true" />
+    <arg name="disparity_processing"            value="false" />
+    <arg name="disparity_registered_processing" value="false" />
+    <arg name="sw_registered_processing"        value="false" />
+    <arg name="hw_registered_processing"        value="true" />
+  </include>
+  <!-- conversion kinect transform -->
+  <node pkg="tf" type="static_transform_publisher" name="camera_in_base_link" args="0.06 0.0 0.0 0.0 0.0 0.0 /base_link /camera_link 5000"/>
+  <!-- web video -->
+  <node pkg="web_video_server" type="web_video_server" name="web_video_server">
+    <param name="port" value="8081"/>
+  </node>
 </launch>
