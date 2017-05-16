@@ -16,7 +16,7 @@
   <arg name="use_map_topic"   value="true"/>
   <include file="$(find turtlebot_navigation)/launch/includes/amcl/amcl.launch.xml"/>
   <!-- launch move_base -->
-  <include file="$(find turtlebot_navigation)/launch/includes/move_base.launch.xml"/>
+  <include file="$(find turtlebot_web)/params/move_base.launch"/>
   <!-- joystick -->
   <node pkg="joy" type="joy_node" name="joy_node">
     <param name="joy_node/dev" value="/dev/input/js0"/>

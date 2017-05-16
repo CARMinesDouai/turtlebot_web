@@ -9,10 +9,10 @@
   </node>
   <!-- conversion laser transform -->
   <node pkg="tf" type="static_transform_publisher" name="laser_in_base_link" args="0.03 0.0 0.0 0.0 0.0 0.0 /base_link /laser 100"/>
+  <!-- launch move_base -->
+  <include file="$(find turtlebot_web)/params/move_base.launch"/>
   <!-- gmapping -->
   <include file="$(find turtlebot_navigation)/launch/includes/gmapping/gmapping.launch.xml"/>
-  <!-- launch move_base -->
-  <include file="$(find turtlebot_navigation)/launch/includes/move_base.launch.xml"/>
   <!-- joystick -->
   <node pkg="joy" type="joy_node" name="joy_node">
     <param name="joy_node/dev" value="/dev/input/js0"/>
