@@ -1,16 +1,2 @@
-/mobile_base/commands/controller_info
-/mobile_base/commands/digital_output
-/mobile_base/controller_info
-/mobile_base/events/bumper
-/mobile_base/events/button
-/mobile_base/events/cliff
-/mobile_base/events/robot_state
-/mobile_base/events/wheel_drop
-/mobile_base/sensors/bumper_pointcloud
-/mobile_base/version_info
-/robot_pose
-
-
-
-rostopic echo /laptop_charge
-rostopic echo /mobile_base/sensors/core
+How do I start gmapping with an initial map?
+http://answers.ros.org/question/54394/how-do-i-start-gmapping-with-an-initial-map/

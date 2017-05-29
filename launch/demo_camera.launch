@@ -20,7 +20,7 @@
   <arg name="use_map_topic"   value="true"/>
   <include file="$(find turtlebot_navigation)/launch/includes/amcl/amcl.launch.xml"/>
   <!-- launch move_base -->
-  <include file="$(find turtlebot_web)/params/move_base.launch"/>
+  <include file="$(find turtlebot_web)/launch/includes/move_base.xml"/>
   <!-- joystick -->
   <node pkg="joy" type="joy_node" name="joy_node">
     <param name="joy_node/dev" value="/dev/input/js0"/>
@@ -33,7 +33,7 @@
   <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch"/>
   <!-- kinect -->
   <include file="$(find freenect_launch)/launch/freenect.launch">
-    <arg name="depth_registration" value="true" /> 
+    <arg name="depth_registration" value="true" />
     <arg name="rgb_processing"                  value="true" />
     <arg name="ir_processing"                   value="false" />
     <arg name="depth_processing"                value="false" />

@@ -10,7 +10,7 @@
   <!-- conversion laser transform -->
   <node pkg="tf" type="static_transform_publisher" name="laser_in_base_link" args="0.03 0.0 0.0 0.0 0.0 0.0 /base_link /laser 100"/>
   <!-- launch move_base -->
-  <include file="$(find turtlebot_web)/params/move_base.launch"/>
+  <include file="$(find turtlebot_web)/launch/includes/move_base.xml"/>
   <!-- gmapping -->
   <include file="$(find turtlebot_navigation)/launch/includes/gmapping/gmapping.launch.xml"/>
   <!-- joystick -->

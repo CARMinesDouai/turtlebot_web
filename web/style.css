@@ -151,6 +151,24 @@ html, body {
   text-transform: uppercase;
   color: rgba(0,184,222,0.7);
 }
+
+.menu {
+  margin-right: 38.75vw;
+  background-color: #fff;
+}
+.menu .header {
+  font-size: 20px;
+  text-align: center;
+}
+.menu a {
+  text-decoration: none;
+  color: inherit;
+}
+.menu .btn {
+  width: 75%;
+  margin-left: 12.5%;
+}
+
 @keyframes
 load { 0% {
   stroke-dashoffset:0

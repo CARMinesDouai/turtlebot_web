@@ -13,10 +13,10 @@
   <arg name="map_file" default="$(find turtlebot_web)/map/map.yaml"/>
   <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
   <!-- amcl -->
-  <arg name="use_map_topic"   value="true"/>
+  <arg name="use_map_topic" value="true"/>
   <include file="$(find turtlebot_navigation)/launch/includes/amcl/amcl.launch.xml"/>
   <!-- launch move_base -->
-  <include file="$(find turtlebot_web)/params/move_base.launch"/>
+  <include file="$(find turtlebot_web)/launch/includes/move_base.xml"/>
   <!-- joystick -->
   <node pkg="joy" type="joy_node" name="joy_node">
     <param name="joy_node/dev" value="/dev/input/js0"/>
