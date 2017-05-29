@@ -5,6 +5,7 @@ var Vmap = function (a) {
   this.divID = a.divID || 'vmap';
   this.showPath = a.showPath || false;
   this.settingPose = false;
+  this.vmapServerName = a.vmapServerName || '/vmap';
   this.utils =  { rosQuaternionToGlobalTheta : function(orientation) {
                     var q0 = orientation.w;
                     var q1 = orientation.x;
@@ -80,7 +81,7 @@ var Vmap = function (a) {
     });
     that.subscribe.map = new ROSLIB.Topic({
       ros : that.ros,
-      name : '/vmap',
+      name : that.vmapServerName,
       messageType : 'torob_msgs/VectorMap'
     });
     that.subscriber.botPos();
