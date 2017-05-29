@@ -33,6 +33,8 @@ var Vmap = function (a) {
                       pathMarker : null};
   this.serverName = a.serverName || '/move_base';
   this.actionName = a.actionName || 'move_base_msgs/MoveBaseAction';
+  this.navServerName = a.navServerName || '/move_base/NavfnROS/plan';
+  this.navActionName = a.navActionName || 'nav_msgs/Path';
   this.actionClient = new ROSLIB.ActionClient({
     ros : that.ros,
     actionName : that.actionName,
@@ -85,8 +87,8 @@ var Vmap = function (a) {
     that.subscriber.map();
     that.navPlan = new ROSLIB.Topic({
       ros : that.ros,
-      name : '/move_base/NavfnROS/plan',
-      messageType : 'nav_msgs/Path'
+      name : that.navServerName,
+      messageType : that.navActionName
     });
     that.svg.onmousedown = function (event) {
       if (event.buttons == 1) {

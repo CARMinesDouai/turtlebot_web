@@ -7,6 +7,8 @@ var Map = function (a) {
   this.showPath = a.showPath || false;
   this.serverName = a.serverName || '/move_base';
   this.actionName = a.actionName || 'move_base_msgs/MoveBaseAction';
+  this.navServerName = a.navServerName || '/move_base/NavfnROS/plan';
+  this.navActionName = a.navActionName || 'nav_msgs/Path';
   this.viewer = new ROS2D.Viewer({
     divID : that.divID,
     width : 1000,
@@ -17,8 +19,8 @@ var Map = function (a) {
     that.initMeta();
     that.navPlan = new ROSLIB.Topic({
       ros : that.ros,
-      name : '/move_base/NavfnROS/plan',
-      messageType : 'nav_msgs/Path'
+      name : that.navServerName,
+      messageType : that.navActionName
     });
     setTimeout(function () {
       that.viewer.scene.children[2].scaleX = that.viewer.scene.children[2].scaleY = 0.02;
